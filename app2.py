@@ -37,7 +37,7 @@ GEMINI_API_KEYS = [k for k in [
     os.getenv("GEMINI_API_KEY_5")
 ] if k]
 CACHE_DB_URL = os.getenv("CACHE_DB_URL", "postgresql://neondb_owner:npg_UCdk9eMi2vGn@ep-mute-firefly-amtmu27v-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require")
-MODELS = ["gemini-3.1-flash-lite-preview", "gemini-2.5-flash", "gemini-3.1-flash-lite-preview"]
+MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]
 
 # --- Services ---
 ai_service = AIService(api_keys=GEMINI_API_KEYS, model_names=MODELS)

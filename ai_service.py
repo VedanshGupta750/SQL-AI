@@ -33,11 +33,17 @@ class AIService:
                 )
             except Exception as e:
                 error_msg = str(e).lower()
-                if "429" in error_msg or "resource_exhausted" in error_msg or "quota" in error_msg:
+                transient = any(s in error_msg for s in (
+                    "429", "resource_exhausted", "quota",
+                    "503", "unavailable", "overloaded",
+                    "500", "internal",
+                    "api_key_invalid", "api key expired", "api_key_expired",
+                ))
+                if transient:
                     attempts += 1
-                    print(f"[WARN] Rate limit hit. Rotating credentials... ({e})")
+                    print(f"[WARN] Transient Gemini error. Rotating credentials... ({e})")
                     self._init_client()
-                    time.sleep(1)
+                    time.sleep(2 ** min(attempts, 4))
                 else:
                     raise e
         raise Exception(f"Max retries ({max_retries}) reached: All API keys exhausted.")
