@@ -120,7 +120,7 @@ class VizService:
         - Use plt.figure() for each chart.
         - When using seaborn plots with a 'palette', you MUST also assign the 'hue' parameter (e.g. `hue=x` or `hue=y`) and set `legend=False` to avoid FutureWarnings.
         """
-        py_script = ai_service.gemini_call(viz_prompt, "Generate Viz Code")
+        py_script = ai_service.chat(viz_prompt, "Generate Viz Code")
 
         max_retries = 1
         attempts = 0
@@ -171,7 +171,7 @@ class VizService:
                     - Sample data:
                     {sample_rows}
                     """
-                    py_script = ai_service.gemini_call(fix_prompt, "Fix Viz Code")
+                    py_script = ai_service.chat(fix_prompt, "Fix Viz Code")
                     if not py_script:
                         print("[ERROR] AI failed to generate corrected viz script.")
                         break

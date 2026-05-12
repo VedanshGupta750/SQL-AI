@@ -1,6 +1,6 @@
 # Multi-DB SQL AI Agent 🤖
 
-A powerful AI-powered FastAPI application that translates natural language into SQL, executes queries against multiple database dialects (PostgreSQL, MySQL, Oracle, SQL Server), generates intelligent visualizations, and features self-healing capabilities for failed queries.
+A powerful AI-powered FastAPI application that translates natural language into SQL, executes queries against multiple database dialects (PostgreSQL, MySQL, Oracle, SQL Server), generates intelligent visualizations, and features self-healing capabilities for failed queries. Powered by OpenAI.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
@@ -10,7 +10,7 @@ A powerful AI-powered FastAPI application that translates natural language into 
 
 ## 🌟 Features
 
-- **🧠 Natural Language to SQL**: Convert plain English questions into optimized SQL queries using Google's Gemini AI
+- **🧠 Natural Language to SQL**: Convert plain English questions into optimized SQL queries using OpenAI
 - **🔄 Self-Healing Queries**: Automatic retry mechanism with AI-powered error correction
 - **📊 Smart Visualizations**: AI-generated charts and graphs using Matplotlib/Seaborn
 - **🗄️ Multi-Database Support**: PostgreSQL, MySQL, Oracle, SQL Server with automatic dialect detection
@@ -29,7 +29,7 @@ A powerful AI-powered FastAPI application that translates natural language into 
 
 - Python 3.8 or higher
 - Database connection (PostgreSQL, MySQL, Oracle, or SQL Server)
-- Google Gemini API key ([Get one here](https://ai.google.dev/))
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
 
 ### Installation
 
@@ -54,8 +54,10 @@ pip install -r requirements.txt
 
 Create a `.env` file in the root directory:
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
 CACHE_DB_URL=postgresql://user:password@host:port/dbname
+# Optional: comma-separated rotation list, defaults to "gpt-4o-mini,gpt-4o"
+# OPENAI_MODELS=gpt-4o-mini,gpt-4o
 ```
 
 5. **Run the application**
@@ -77,7 +79,7 @@ SQLai/
 ├── models.py               # Pydantic models for request/response
 ├── database_manager.py     # Database connection & schema management
 ├── cache_manager.py        # Schema caching with Neon Postgres
-├── ai_service.py           # Google Gemini AI integration
+├── ai_service.py           # OpenAI integration
 ├── viz_service.py          # Visualization generation
 ├── utils.py                # Helper functions
 ├── config.py               # Configuration management
@@ -95,7 +97,7 @@ SQLai/
 - FastAPI - Modern, fast web framework
 - SQLAlchemy - Database ORM and query builder
 - Pandas - Data manipulation and analysis
-- Google Gemini AI - Natural language processing
+- OpenAI - Natural language processing
 - Matplotlib/Seaborn - Data visualization
 
 **Frontend:**
@@ -332,9 +334,9 @@ Access the frontend at `http://localhost:8000`
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `GEMINI_API_KEY` | Google Gemini API key | Required |
+| `OPENAI_API_KEY` | OpenAI API key | Required |
 | `CACHE_DB_URL` | PostgreSQL cache database URL | Neon Postgres |
-| `MODEL_NAME` | Gemini model to use | `gemini-2.5-flash` |
+| `OPENAI_MODELS` | Comma-separated rotation list | `gpt-4o-mini,gpt-4o` |
 
 ### Safe Mode
 
@@ -368,7 +370,7 @@ This project is licensed under the MIT License.
 
 ## 🙏 Acknowledgments
 
-- Google Gemini AI for natural language processing
+- OpenAI for natural language processing
 - FastAPI for the excellent web framework
 - Neon Postgres for serverless database caching
 - The open-source community
@@ -381,4 +383,4 @@ For issues, questions, or suggestions, please open an issue on GitHub.
 
 ---
 
-**Built with ❤️ using FastAPI and Google Gemini AI**
+**Built with FastAPI and OpenAI**

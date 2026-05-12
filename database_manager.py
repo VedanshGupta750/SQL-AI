@@ -59,7 +59,7 @@ class DatabaseManager:
         if not schema_str: return ""
         prompt = f"Analyze schema. Find categorical columns. Return JSON list: [{{'table': 't', 'column': 'c'}}]\nSchema: {schema_str}"
         try:
-            resp = ai_service.gemini_call(prompt, "Extract context")
+            resp = ai_service.chat(prompt, "Extract context")
             cols = json.loads(resp)
             engine = DatabaseManager.get_engine(db_url)
             lines = []

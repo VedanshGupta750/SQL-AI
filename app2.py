@@ -29,18 +29,19 @@ from viz_service import VizService
 from utils import get_hash, get_dialect_name
 
 # --- Configuration ---
-GEMINI_API_KEYS = [k for k in [
-    os.getenv("GEMINI_API_KEY_1"),
-    os.getenv("GEMINI_API_KEY_2"),
-    os.getenv("GEMINI_API_KEY_3"),
-    os.getenv("GEMINI_API_KEY_4"),
-    os.getenv("GEMINI_API_KEY_5")
+OPENAI_API_KEYS = [k for k in [
+    os.getenv("OPENAI_API_KEY"),
+    os.getenv("OPENAI_API_KEY_1"),
+    os.getenv("OPENAI_API_KEY_2"),
+    os.getenv("OPENAI_API_KEY_3"),
+    os.getenv("OPENAI_API_KEY_4"),
+    os.getenv("OPENAI_API_KEY_5"),
 ] if k]
 CACHE_DB_URL = os.getenv("CACHE_DB_URL", "postgresql://neondb_owner:npg_UCdk9eMi2vGn@ep-mute-firefly-amtmu27v-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require")
-MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]
+MODELS = [m.strip() for m in os.getenv("OPENAI_MODELS", "gpt-4o-mini,gpt-4o").split(",") if m.strip()]
 
 # --- Services ---
-ai_service = AIService(api_keys=GEMINI_API_KEYS, model_names=MODELS)
+ai_service = AIService(api_keys=OPENAI_API_KEYS, model_names=MODELS)
 cache_manager = CacheManager(cache_db_url=CACHE_DB_URL)
 db_manager = DatabaseManager()
 
@@ -192,7 +193,7 @@ def generate_response(req: UserRequest):
     - Handle date comparisons using dialect-specific functions.
     """
     
-    sql_query = ai_service.gemini_call(system_prompt, req.query)
+    sql_query = ai_service.chat(system_prompt, req.query)
     if not sql_query:
         return AnalysisResponse(sql_query="", error="AI failed to generate SQL.")
     
@@ -283,7 +284,7 @@ def generate_dashboard(req: DBConnectionRequest):
     """
     
     try:
-        raw_plan = ai_service.gemini_call(strategy_prompt, "Generate Dashboard Plan")
+        raw_plan = ai_service.chat(strategy_prompt, "Generate Dashboard Plan")
         dashboard_plan = json.loads(raw_plan)
         if not isinstance(dashboard_plan, list):
             raise ValueError("AI returned invalid JSON structure")
@@ -354,7 +355,7 @@ def optimize_sql(req: OptimizeRequest):
     user_content = f"Input SQL: {req.query}"
 
     try:
-        response_text = ai_service.gemini_call(system_prompt, user_content)
+        response_text = ai_service.chat(system_prompt, user_content)
         result = json.loads(response_text)
         
         return OptimizeResponse(
